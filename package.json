@@ -1,0 +1,13 @@
+{
+  "name": "focusflow",
+  "version": "1.0.0",
+  "description": "FocusFlow — трекер задач и привычек (статический сайт)",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve . --single --listen $PORT",
+    "dev": "serve . --single"
+  },
+  "dependencies": {
+    "serve": "^14.2.4"
+  }
+}

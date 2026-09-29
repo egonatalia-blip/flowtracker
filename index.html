@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F8F9FA" id="metaTheme">
+  <meta name="description" content="FocusFlow — трекер задач и привычек">
+  <title>FocusFlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%236366F1'/%3E%3Cpath d='M10 8.5h13M10 8.5v9.5M10 13.5h8.5M10 18h3.2l3.2 4.8 4.6-6.6' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="splash" id="splash" aria-hidden="true">
+    <img src="logo.png" width="120" height="120" alt="FocusFlow">
+  </div>
+  <div class="screen-lock" id="lockScreen" hidden></div>
+  <div class="app">
+
+    <header class="app-header">
+      <div class="logo">
+        <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <rect width="32" height="32" rx="9" fill="url(#lg)"/>
+          <path d="M10 8.5h13M10 8.5v9.5M10 13.5h8.5M10 18h3.2l3.2 4.8 4.6-6.6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="lg" x1="0" y1="0" x2="32" y2="32">
+              <stop offset="0" stop-color="#6366F1"/>
+              <stop offset="1" stop-color="#818CF8"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="logo-name">FocusFlow</span>
+      </div>
+      <button class="btn-icon" id="bellBtn" aria-label="Уведомления">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+          <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+        </svg>
+      </button>
+    </header>
+
+    <main class="content">
+
+      <section class="view active" id="view-tasks">
+        <div class="view-header">
+          <div>
+            <h1>Мои задачи</h1>
+            <p class="sub" id="tasksDate"></p>
+          </div>
+          <button class="btn-add" onclick="openTaskModal()" aria-label="Добавить задачу">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+        <div class="chips" id="taskFilters"></div>
+        <div id="todayProgress" class="progress card" hidden></div>
+        <div id="taskList" class="list"></div>
+      </section>
+
+      <section class="view" id="view-kanban">
+        <div class="view-header">
+          <div>
+            <h1>Канбан</h1>
+            <p class="sub">Перетащи задачи между колонками</p>
+          </div>
+          <button class="btn-add" onclick="openTaskModal()" aria-label="Добавить задачу">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+        <div class="kanban" id="kanbanBoard"></div>
+      </section>
+
+      <section class="view" id="view-habits">
+        <div class="view-header">
+          <div>
+            <h1>Мои привычки</h1>
+            <p class="sub" id="habitsDate"></p>
+          </div>
+          <button class="btn-add" onclick="openHabitModal()" aria-label="Добавить привычку">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+        <div id="habitCalendar"></div>
+        <div id="habitList" class="list"></div>
+      </section>
+
+      <section class="view" id="view-stats">
+        <div class="view-header">
+          <div>
+            <h1>Статистика</h1>
+            <p class="sub" id="statsRange"></p>
+          </div>
+        </div>
+        <div class="segmented" id="statsPeriod">
+          <button data-period="week" class="active">Неделя</button>
+          <button data-period="month">Месяц</button>
+          <button data-period="year">Год</button>
+        </div>
+        <div id="statsBody"></div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="view-header">
+          <div>
+            <h1>Настройки</h1>
+          </div>
+        </div>
+        <div id="settingsBody"></div>
+      </section>
+
+    </main>
+
+    <nav class="tab-bar">
+      <button class="tab-btn active" data-tab="tasks" aria-label="Задачи">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+          <rect x="9" y="3" width="6" height="4" rx="1"/>
+          <line x1="9" y1="12" x2="15" y2="12"/>
+          <line x1="9" y1="16" x2="15" y2="16"/>
+        </svg>
+        <span>Задачи</span>
+      </button>
+      <button class="tab-btn" data-tab="habits" aria-label="Привычки">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+        </svg>
+        <span>Привычки</span>
+      </button>
+      <button class="tab-btn" data-tab="kanban" aria-label="Канбан">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="12" rx="1"/><rect x="17" y="3" width="5" height="8" rx="1"/>
+        </svg>
+        <span>Канбан</span>
+      </button>
+      <button class="tab-btn" data-tab="stats" aria-label="Статистика">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="20" x2="12" y2="10"/>
+          <line x1="18" y1="20" x2="18" y2="4"/>
+          <line x1="6" y1="20" x2="6" y2="16"/>
+        </svg>
+        <span>Статистика</span>
+      </button>
+      <button class="tab-btn" data-tab="settings" aria-label="Настройки">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        <span>Настройки</span>
+      </button>
+    </nav>
+
+    <div class="overlay" id="overlay" hidden><div class="sheet" id="sheet"></div></div>
+    <div class="toast" id="toast" hidden></div>
+
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
